@@ -3,136 +3,165 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coaching Crown - A Fictional Story Game</title>
+  <title>The Bharat College of Technology — A Leaked Dossier</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <main class="shell">
-    <section class="game-board" aria-label="Story mode game">
+
+    <!-- ============ CONTENT WARNING ============ -->
+    <section id="screen-warning" class="screen active" aria-label="Content warning">
+      <div class="card warning-card">
+        <p class="kicker">Case file — restricted</p>
+        <h1>The Bharat College of Technology</h1>
+        <p class="tagline">A leaked dossier on how one rented room captured an exam.</p>
+        <div class="warning-body">
+          <p><strong>Before you begin.</strong> This is a work of fiction. Every person, institute,
+          official, and exam in it is invented — a composite, not a real name. It is a story about
+          <em>systems</em>, not individuals.</p>
+          <p>It deals honestly with academic pressure, exploitation, debt, and — on its darkest path —
+          self-harm. It is told with restraint, never for shock. How far you go is your choice.</p>
+          <p class="helpline">If you or someone you know is struggling, you are not alone.
+          Tele MANAS (India), 24×7: <strong>14416</strong> / 1-800-891-4416. iCall: <strong>9152987821</strong>.</p>
+        </div>
+        <button id="ackBtn" class="btn primary" type="button">I understand — open the file</button>
+      </div>
+    </section>
+
+    <!-- ============ TITLE / SETUP ============ -->
+    <section id="screen-title" class="screen" aria-label="New game setup">
+      <div class="card title-card">
+        <p class="kicker">Case file — subject details</p>
+        <h1>Whose story is this?</h1>
+        <p class="tagline">Twelve years. One room becomes an empire. Decide what it costs.</p>
+
+        <div class="field">
+          <label for="founderInput">Your name (the founder)</label>
+          <input id="founderInput" type="text" maxlength="28" placeholder="e.g. R.K. Verma" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="instituteInput">Your institute's name</label>
+          <input id="instituteInput" type="text" maxlength="28" placeholder="e.g. Pinnacle Vidya" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="subjectSelect">You start by teaching…</label>
+          <select id="subjectSelect">
+            <option value="math">Maths</option>
+            <option value="physics">Physics</option>
+            <option value="chemistry">Chemistry</option>
+          </select>
+        </div>
+
+        <div class="title-actions">
+          <button id="surpriseBtn" class="btn ghost" type="button">Surprise me</button>
+          <button id="startBtn" class="btn primary" type="button">Begin — Year 1</button>
+        </div>
+        <button id="continueBtn" class="btn link" type="button" style="display:none">Continue saved timeline</button>
+      </div>
+    </section>
+
+    <!-- ============ GAME ============ -->
+    <section id="screen-game" class="screen game-board" aria-label="Story">
       <div class="stage">
         <div class="topbar">
-          <div>
-            <p class="kicker">Fictional cautionary story</p>
-            <h1>Coaching Crown</h1>
+          <div class="topbar-title">
+            <p class="kicker">Leaked dossier</p>
+            <h1>The Bharat College of Technology</h1>
           </div>
-          <button class="icon-button" id="restartBtn" type="button" aria-label="Restart game" title="Restart">
-            <span aria-hidden="true">R</span>
-          </button>
+          <div class="topbar-actions">
+            <button id="muteBtn" class="icon-button" type="button" aria-pressed="false">Sound: on</button>
+            <button id="restartBtn" class="icon-button" type="button" aria-label="Restart">Restart</button>
+          </div>
         </div>
 
-        <div class="visual room-scene" id="visualScene" aria-label="Pixel story scene">
-          <div class="pixel-skyline" id="skyline"></div>
-          <div class="room-wall">
-            <div class="wall-stain stain-one"></div>
-            <div class="wall-stain stain-two"></div>
-            <div class="tube-light broken left"></div>
-            <div class="tube-light broken right"></div>
-            <div class="board" id="sceneBoard">6 STUDENTS</div>
-            <div class="poster poster-one">RANKS?</div>
-            <div class="poster poster-two">FEES DUE</div>
+        <!-- pixel diorama -->
+        <div id="scene" class="scene is-room" aria-label="Story scene" data-heat="low">
+          <div class="scene-sky"><span></span><span></span><span></span></div>
+
+          <div class="scene-room">
+            <div class="wall-stain s1"></div>
+            <div class="wall-stain s2"></div>
+            <div class="tube-light left"></div>
+            <div class="tube-light right"></div>
+            <div class="room-board" id="sceneBoard">6 STUDENTS</div>
+            <div class="poster p1">RANKS?</div>
+            <div class="poster p2">FEES DUE</div>
           </div>
-          <div class="building-row" id="buildingRow">
-            <div class="building small"></div>
-            <div class="building campus" id="campusBuilding">
-              <div class="office-floor floor-ads" data-floor="ads">
-                <span>ADS</span>
-                <i></i>
-              </div>
-              <div class="office-floor floor-finance" data-floor="finance">
-                <span>FINANCE</span>
-                <i></i>
-              </div>
-              <div class="office-floor floor-math" data-floor="math">
-                <span>MATH DEPT</span>
-                <i></i>
-              </div>
-              <div class="office-floor floor-board" data-floor="board">
-                <span>BOARDROOM</span>
-                <i></i>
-              </div>
+
+          <div class="scene-city">
+            <div class="building b-small"></div>
+            <div class="building b-campus">
+              <div class="office-floor" data-floor="ads"><span>ADS</span></div>
+              <div class="office-floor" data-floor="finance"><span>FINANCE</span></div>
+              <div class="office-floor" data-floor="dept"><span>FACULTY</span></div>
+              <div class="office-floor" data-floor="board"><span>BOARD</span></div>
             </div>
-            <div class="building mid"></div>
-            <div class="building tall"></div>
+            <div class="building b-mid"></div>
+            <div class="building b-tall"></div>
           </div>
-          <div class="floor-nav" id="floorNav" aria-label="Building floor navigation">
-            <button type="button" data-floor="ads">Ads</button>
-            <button type="button" data-floor="finance">Finance</button>
-            <button type="button" data-floor="math">Math</button>
-            <button type="button" data-floor="board">Board</button>
-          </div>
-          <div class="floor">
-            <div class="desk"></div>
-            <div class="chair chair-one"></div>
-            <div class="chair chair-two"></div>
-            <div class="chair chair-three"></div>
-          </div>
-          <div class="pixel-person founder" id="founderSprite">
-            <span class="hair"></span>
-            <span class="head"></span>
-            <span class="body"></span>
-            <span class="legs"></span>
-          </div>
-          <div class="pixel-person student girl" id="girlSprite">
-            <span class="hair"></span>
-            <span class="head"></span>
-            <span class="body"></span>
-            <span class="legs"></span>
-          </div>
-          <div class="pixel-person student boy student-two">
-            <span class="hair"></span>
-            <span class="head"></span>
-            <span class="body"></span>
-            <span class="legs"></span>
-          </div>
-          <div class="pixel-person official" id="officialSprite">
-            <span class="hair"></span>
-            <span class="head"></span>
-            <span class="body"></span>
-            <span class="legs"></span>
-          </div>
+
+          <div class="scene-floorline"></div>
+
+          <div class="sprite founder"><i class="head"></i><i class="body"></i></div>
+          <div class="sprite student" id="aaravSprite"><i class="head"></i><i class="body"></i></div>
+          <div class="sprite student two"><i class="head"></i><i class="body"></i></div>
+          <div class="sprite official"><i class="head"></i><i class="body"></i></div>
+
           <div class="scene-banner">
-            <strong id="founderTitle">One rented room</strong>
-            <small id="founderSub">6 students, 1 whiteboard</small>
+            <strong id="sceneBannerTitle">Year 1 — The Rented Room</strong>
+            <small id="sceneBannerSub">One room, six students</small>
           </div>
         </div>
 
-        <div class="meters" aria-label="Company stats">
-          <div class="meter">
-            <div class="meter-label"><span>Trust</span><strong id="trustText">55</strong></div>
-            <div class="bar"><span id="trustBar"></span></div>
+        <!-- meters -->
+        <div class="meters" aria-label="Stats">
+          <div class="meter" data-meter="saakh">
+            <div class="meter-label"><span>Saakh</span><strong id="saakhText">55</strong></div>
+            <div class="bar"><span id="saakhBar" style="width:55%"></span></div>
           </div>
-          <div class="meter">
-            <div class="meter-label"><span>Money</span><strong id="moneyText">10</strong></div>
-            <div class="bar"><span id="moneyBar"></span></div>
+          <div class="meter" data-meter="mudra">
+            <div class="meter-label"><span>Mudra</span><strong id="mudraText">18</strong></div>
+            <div class="bar"><span id="mudraBar" style="width:18%"></span></div>
           </div>
-          <div class="meter">
+          <div class="meter" data-meter="power">
             <div class="meter-label"><span>Power</span><strong id="powerText">5</strong></div>
-            <div class="bar"><span id="powerBar"></span></div>
+            <div class="bar"><span id="powerBar" style="width:5%"></span></div>
           </div>
-          <div class="meter heat">
+          <div class="meter heat" data-meter="heat">
             <div class="meter-label"><span>Heat</span><strong id="heatText">0</strong></div>
-            <div class="bar"><span id="heatBar"></span></div>
+            <div class="bar"><span id="heatBar" style="width:0%"></span></div>
           </div>
         </div>
       </div>
 
+      <!-- story panel -->
       <aside class="story-panel">
         <div class="chapter-row">
-          <span id="stageTag">Empire phase 1 of 7</span>
-          <span id="episodeTag">Episode 1: The Choice</span>
+          <span id="stageTag">File 1 of 7</span>
+          <span id="episodeTag">The Choice</span>
         </div>
         <div class="year-tag" id="yearTag">Year 1</div>
-        <h2 id="sceneTitle">The Small Room</h2>
+        <h2 id="sceneTitle">The Rented Room</h2>
         <p id="sceneText"></p>
         <div class="choices" id="choices"></div>
+
+        <div class="ledger-box">
+          <h3>The human ledger</h3>
+          <ul id="ledger"></ul>
+        </div>
         <div class="log">
-          <h3>Consequence Log</h3>
+          <h3>Consequence log</h3>
           <ul id="eventLog"></ul>
         </div>
       </aside>
     </section>
   </main>
 
-  <script src="game.js"></script>
+  <script src="src/data.js"></script>
+  <script src="src/state.js"></script>
+  <script src="src/audio.js"></script>
+  <script src="src/scene.js"></script>
+  <script src="src/ui.js"></script>
+  <script src="src/main.js"></script>
 </body>
 </html>
