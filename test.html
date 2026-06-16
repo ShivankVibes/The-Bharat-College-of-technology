@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>BCT tests</title>
+  <style>body{font:14px/1.5 monospace;background:#111;color:#ddd;padding:20px}</style>
+</head>
+<body>
+  <pre id="out"></pre>
+  <script src="src/state.js"></script>
+  <script src="src/data.js"></script>
+  <script>
+    var out = document.getElementById("out"), pass = 0, fail = 0;
+    function ok(name, cond) {
+      if (cond) { pass++; } else { fail++; }
+      out.textContent += (cond ? "PASS  " : "FAIL  ") + name + "\n";
+    }
+
+    var S = BCT.state;
+
+    ok("clamp upper", S.clamp(140) === 100);
+    ok("clamp lower", S.clamp(-5) === 0);
+    ok("clamp rounds", S.clamp(33.6) === 34);
+
+    var s = S.defaultState();
+    S.applyEffects(s, { saakh: -30, mudra: 40, heat: 65, ledger: { aarav: -60 } });
+    ok("effects applied", s.mudra === 58 && s.saakh === 25 && s.heat === 65 && s.ledger.aarav === 0);
+
+    ok("tragedy triggers on corrupt+pressure", S.checkTragedy(s) === true && s.tragedy === true);
+    ok("tragedy fires once", S.checkTragedy(s) === false);
+
+    var clean = S.defaultState(); clean.saakh = 80; clean.heat = 20;
+    ok("legacy ending", S.selectEnding(clean) === "legacy");
+
+    var hollow = S.defaultState();
+    hollow.mudra = 90; hollow.saakh = 8; hollow.ledger.aarav = 5; hollow.ledger.meena = 10;
+    ok("hollow ending", S.selectEnding(hollow) === "hollow");
+
+    var raid = S.defaultState(); raid.heat = 85; raid.saakh = 30;
+    ok("raid ending", S.selectEnding(raid) === "raid");
+
+    var empire = S.defaultState(); empire.mudra = 75; empire.power = 75; empire.saakh = 40;
+    ok("empire ending", S.selectEnding(empire) === "empire");
+
+    ok("reform is the fallback", S.selectEnding(S.defaultState()) === "reform");
+
+    // data.js sanity (loaded above)
+    ok("data present", !!(BCT.data && BCT.data.chapters));
+    ok("7 chapters", BCT.data.chapters.length === 7);
+    ok("5 endings", Object.keys(BCT.data.endings).length === 5);
+    ok("every chapter has clean+dirty routes", BCT.data.chapters.every(function (c) {
+      return c.routes && c.routes.clean && c.routes.clean.length === 3 &&
+             c.routes.dirty && c.routes.dirty.length === 3;
+    }));
+
+    out.textContent += "\n" + pass + " passed, " + fail + " failed\n";
+    document.title = fail ? "FAIL (" + fail + ")" : "PASS";
+  </script>
+</body>
+</html>
