@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coaching Crown - A Fictional Story Game</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="game-board" aria-label="Story mode game">
+      <div class="stage">
+        <div class="topbar">
+          <div>
+            <p class="kicker">Fictional cautionary story</p>
+            <h1>Coaching Crown</h1>
+          </div>
+          <button class="icon-button" id="restartBtn" type="button" aria-label="Restart game" title="Restart">
+            <span aria-hidden="true">R</span>
+          </button>
+        </div>
+
+        <div class="visual room-scene" id="visualScene" aria-label="Pixel story scene">
+          <div class="pixel-skyline" id="skyline"></div>
+          <div class="room-wall">
+            <div class="wall-stain stain-one"></div>
+            <div class="wall-stain stain-two"></div>
+            <div class="tube-light broken left"></div>
+            <div class="tube-light broken right"></div>
+            <div class="board" id="sceneBoard">6 STUDENTS</div>
+            <div class="poster poster-one">RANKS?</div>
+            <div class="poster poster-two">FEES DUE</div>
+          </div>
+          <div class="building-row" id="buildingRow">
+            <div class="building small"></div>
+            <div class="building campus" id="campusBuilding">
+              <div class="office-floor floor-ads" data-floor="ads">
+                <span>ADS</span>
+                <i></i>
+              </div>
+              <div class="office-floor floor-finance" data-floor="finance">
+                <span>FINANCE</span>
+                <i></i>
+              </div>
+              <div class="office-floor floor-math" data-floor="math">
+                <span>MATH DEPT</span>
+                <i></i>
+              </div>
+              <div class="office-floor floor-board" data-floor="board">
+                <span>BOARDROOM</span>
+                <i></i>
+              </div>
+            </div>
+            <div class="building mid"></div>
+            <div class="building tall"></div>
+          </div>
+          <div class="floor-nav" id="floorNav" aria-label="Building floor navigation">
+            <button type="button" data-floor="ads">Ads</button>
+            <button type="button" data-floor="finance">Finance</button>
+            <button type="button" data-floor="math">Math</button>
+            <button type="button" data-floor="board">Board</button>
+          </div>
+          <div class="floor">
+            <div class="desk"></div>
+            <div class="chair chair-one"></div>
+            <div class="chair chair-two"></div>
+            <div class="chair chair-three"></div>
+          </div>
+          <div class="pixel-person founder" id="founderSprite">
+            <span class="hair"></span>
+            <span class="head"></span>
+            <span class="body"></span>
+            <span class="legs"></span>
+          </div>
+          <div class="pixel-person student girl" id="girlSprite">
+            <span class="hair"></span>
+            <span class="head"></span>
+            <span class="body"></span>
+            <span class="legs"></span>
+          </div>
+          <div class="pixel-person student boy student-two">
+            <span class="hair"></span>
+            <span class="head"></span>
+            <span class="body"></span>
+            <span class="legs"></span>
+          </div>
+          <div class="pixel-person official" id="officialSprite">
+            <span class="hair"></span>
+            <span class="head"></span>
+            <span class="body"></span>
+            <span class="legs"></span>
+          </div>
+          <div class="scene-banner">
+            <strong id="founderTitle">One rented room</strong>
+            <small id="founderSub">6 students, 1 whiteboard</small>
+          </div>
+        </div>
+
+        <div class="meters" aria-label="Company stats">
+          <div class="meter">
+            <div class="meter-label"><span>Trust</span><strong id="trustText">55</strong></div>
+            <div class="bar"><span id="trustBar"></span></div>
+          </div>
+          <div class="meter">
+            <div class="meter-label"><span>Money</span><strong id="moneyText">10</strong></div>
+            <div class="bar"><span id="moneyBar"></span></div>
+          </div>
+          <div class="meter">
+            <div class="meter-label"><span>Power</span><strong id="powerText">5</strong></div>
+            <div class="bar"><span id="powerBar"></span></div>
+          </div>
+          <div class="meter heat">
+            <div class="meter-label"><span>Heat</span><strong id="heatText">0</strong></div>
+            <div class="bar"><span id="heatBar"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="story-panel">
+        <div class="chapter-row">
+          <span id="stageTag">Empire phase 1 of 7</span>
+          <span id="episodeTag">Episode 1: The Choice</span>
+        </div>
+        <div class="year-tag" id="yearTag">Year 1</div>
+        <h2 id="sceneTitle">The Small Room</h2>
+        <p id="sceneText"></p>
+        <div class="choices" id="choices"></div>
+        <div class="log">
+          <h3>Consequence Log</h3>
+          <ul id="eventLog"></ul>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
