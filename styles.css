@@ -230,6 +230,11 @@ body {
 .scene.is-city .scene-city { opacity: 1; transform: none; }
 .scene.is-room .scene-city { opacity: 0; }
 
+/* episode tints on the scene banner */
+.scene.is-profit .scene-banner { border-left-color: var(--clean); }
+.scene.is-consequence .scene-banner { border-left-color: var(--dirty); }
+.scene.is-branch .room-board { background: #14302a; box-shadow: 0 0 0 2px #1a3a32 inset; }
+
 /* heat glow */
 .scene.is-heat::after,
 .scene.is-crisis::after {

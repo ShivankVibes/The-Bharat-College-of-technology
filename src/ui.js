@@ -49,6 +49,7 @@ window.BCT = window.BCT || {};
     if (!textEl || !barEl) return;
     var prev = lastMeters[key];
     barEl.style.width = value + "%";
+    barEl.setAttribute("aria-valuenow", value);
     if (prev === null || prefersReducedMotion()) {
       textEl.textContent = value;
     } else {
@@ -107,10 +108,13 @@ window.BCT = window.BCT || {};
     if ((opts && opts.instant) || prefersReducedMotion()) {
       el.textContent = full;
       el.classList.remove("typing");
+      el.removeAttribute("aria-busy");
       return;
     }
     el.textContent = "";
     el.classList.add("typing");
+    // Suppress per-character screen-reader spam; announce once when done.
+    el.setAttribute("aria-busy", "true");
     var i = 0;
     typeTimer = setInterval(function () {
       // reveal a few chars per tick for pace
@@ -119,6 +123,7 @@ window.BCT = window.BCT || {};
       if (i >= full.length) {
         el.textContent = full;
         el.classList.remove("typing");
+        el.removeAttribute("aria-busy");
         clearInterval(typeTimer);
         typeTimer = null;
       }
@@ -130,6 +135,7 @@ window.BCT = window.BCT || {};
     if (refs && refs.sceneText) {
       refs.sceneText.textContent = text;
       refs.sceneText.classList.remove("typing");
+      refs.sceneText.removeAttribute("aria-busy");
     }
   }
 

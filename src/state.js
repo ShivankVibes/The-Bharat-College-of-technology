@@ -17,7 +17,7 @@ window.BCT = window.BCT || {};
       mudra: 18,
       power: 5,
       heat: 0,
-      ledger: { aarav: 60, sharmaDebt: 0, meena: 60, whistleblower: null },
+      ledger: { aarav: 60, sharmaDebt: 0, meena: 60 },
       tragedy: false,
       log: []
     };

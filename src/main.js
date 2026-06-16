@@ -93,6 +93,13 @@ window.BCT = window.BCT || {};
       AU.cue("chalk");
       startGame(f, inst, subj);
     });
+    // Enter on either name field begins the game.
+    ["founderInput", "instituteInput"].forEach(function (id) {
+      var inp = document.getElementById(id);
+      if (inp) inp.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && start) { e.preventDefault(); start.click(); }
+      });
+    });
     var cont = document.getElementById("continueBtn");
     if (cont) cont.addEventListener("click", function () {
       var saved = S.load();

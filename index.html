@@ -117,19 +117,19 @@
         <div class="meters" aria-label="Stats">
           <div class="meter" data-meter="saakh">
             <div class="meter-label"><span>Saakh</span><strong id="saakhText">55</strong></div>
-            <div class="bar"><span id="saakhBar" style="width:55%"></span></div>
+            <div class="bar"><span id="saakhBar" style="width:55%" role="progressbar" aria-label="Saakh" aria-valuemin="0" aria-valuemax="100" aria-valuenow="55"></span></div>
           </div>
           <div class="meter" data-meter="mudra">
             <div class="meter-label"><span>Mudra</span><strong id="mudraText">18</strong></div>
-            <div class="bar"><span id="mudraBar" style="width:18%"></span></div>
+            <div class="bar"><span id="mudraBar" style="width:18%" role="progressbar" aria-label="Mudra" aria-valuemin="0" aria-valuemax="100" aria-valuenow="18"></span></div>
           </div>
           <div class="meter" data-meter="power">
             <div class="meter-label"><span>Power</span><strong id="powerText">5</strong></div>
-            <div class="bar"><span id="powerBar" style="width:5%"></span></div>
+            <div class="bar"><span id="powerBar" style="width:5%" role="progressbar" aria-label="Power" aria-valuemin="0" aria-valuemax="100" aria-valuenow="5"></span></div>
           </div>
           <div class="meter heat" data-meter="heat">
             <div class="meter-label"><span>Heat</span><strong id="heatText">0</strong></div>
-            <div class="bar"><span id="heatBar" style="width:0%"></span></div>
+            <div class="bar"><span id="heatBar" style="width:0%" role="progressbar" aria-label="Heat" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></span></div>
           </div>
         </div>
       </div>
@@ -142,7 +142,7 @@
         </div>
         <div class="year-tag" id="yearTag">Year 1</div>
         <h2 id="sceneTitle">The Rented Room</h2>
-        <p id="sceneText"></p>
+        <p id="sceneText" aria-live="polite" aria-atomic="true"></p>
         <div class="choices" id="choices"></div>
 
         <div class="ledger-box">
