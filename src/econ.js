@@ -13,16 +13,26 @@ window.BCT = window.BCT || {};
   // ---- buildable assets --------------------------------------------------
   // group: room | floor | branch | staff. level-based cost = base * growth^level.
   var ASSETS = {
-    maths:      { label: "Maths Room",      group: "room",  base: 25000,  growth: 1.7,  max: 6, blurb: "Seats and fees for Maths." },
-    physics:    { label: "Physics Room",    group: "room",  base: 25000,  growth: 1.7,  max: 6, blurb: "Seats and fees for Physics." },
-    chemistry:  { label: "Chemistry Room",  group: "room",  base: 25000,  growth: 1.7,  max: 6, blurb: "Seats and fees for Chemistry." },
-    marketing:  { label: "Marketing Floor", group: "floor", base: 45000,  growth: 1.8,  max: 6, blurb: "Pulls students in — more reach, faster fill." },
-    finance:    { label: "Finance Floor",   group: "floor", base: 60000,  growth: 1.85, max: 6, blurb: "Squeezes more fee out of every student." },
-    hostel:     { label: "Hostel Block",    group: "floor", base: 55000,  growth: 1.8,  max: 6, blurb: "Houses far-away students. Big capacity, more pressure." },
-    boardroom:  { label: "Boardroom",       group: "floor", base: 120000, growth: 1.9,  max: 5, blurb: "Reach and influence. Raises Power." },
-    branches:   { label: "New-City Branch", group: "branch", base: 300000, growth: 2.0, max: 8, blurb: "A whole new campus. Huge income, huge exposure." },
-    teachers:   { label: "Hire a Teacher",  group: "staff", base: 40000,  growth: 1.35, max: 20, blurb: "Real results. +Saakh on hire." },
-    counselors: { label: "Hire a Counselor", group: "staff", base: 65000, growth: 1.4,  max: 12, blurb: "Protects students' wellbeing. Softens the human cost." }
+    maths:      { label: "Maths Room",      group: "room",  base: 25000,  growth: 1.7,  max: 6, blurb: "Seats and fees for Maths.",
+                  benefit: "+14 student seats per level · more fee income" },
+    physics:    { label: "Physics Room",    group: "room",  base: 25000,  growth: 1.7,  max: 6, blurb: "Seats and fees for Physics.",
+                  benefit: "+14 student seats per level · more fee income" },
+    chemistry:  { label: "Chemistry Room",  group: "room",  base: 25000,  growth: 1.7,  max: 6, blurb: "Seats and fees for Chemistry.",
+                  benefit: "+14 student seats per level · more fee income" },
+    marketing:  { label: "Marketing Floor", group: "floor", base: 45000,  growth: 1.8,  max: 6, blurb: "Pulls students in — more reach, faster fill.",
+                  benefit: "+12 capacity/level · seats fill faster · small instant surge on buy" },
+    finance:    { label: "Finance Floor",   group: "floor", base: 60000,  growth: 1.85, max: 6, blurb: "Squeezes more fee out of every student.",
+                  benefit: "+22% fee income per level" },
+    hostel:     { label: "Hostel Block",    group: "floor", base: 55000,  growth: 1.8,  max: 6, blurb: "Houses far-away students. Big capacity, more pressure.",
+                  benefit: "+45 capacity per level" },
+    boardroom:  { label: "Boardroom",       group: "floor", base: 120000, growth: 1.9,  max: 5, blurb: "Reach and influence. Raises Power.",
+                  benefit: "+8 capacity · +3 Power per level" },
+    branches:   { label: "New-City Branch", group: "branch", base: 300000, growth: 2.0, max: 8, blurb: "A whole new campus. Huge income, huge exposure.",
+                  benefit: "+120 capacity per branch" },
+    teachers:   { label: "Hire a Teacher",  group: "staff", base: 40000,  growth: 1.35, max: 20, blurb: "Real results. +Saakh on hire.",
+                  benefit: "+2 Saakh on hire · +2% income each" },
+    counselors: { label: "Hire a Counselor", group: "staff", base: 65000, growth: 1.4,  max: 12, blurb: "Protects students' wellbeing and cools the scandal.",
+                  benefit: "−Heat on hire & over time · protects Aarav & Meena · softens scheme harm" }
   };
 
   // ---- corrupt schemes (unlocked by story choices) -----------------------
@@ -98,19 +108,25 @@ window.BCT = window.BCT || {};
     if (key === "counselors") {
       state.ledger.aarav = clamp(state.ledger.aarav + 4);
       state.ledger.meena = clamp(state.ledger.meena + 3);
+      state.heat = clamp(state.heat - 5); // a counselor calms the pressure (and the optics)
     }
     if (key === "boardroom") state.power = clamp(state.power + 3);
     if (key === "marketing") state.enrollment = Math.min(capacity(state), state.enrollment + capacity(state) * 0.05);
     return true;
   }
 
-  // One-shot enrollment surge.
+  // Big one-shot enrollment surge. Cost scales with your size so it stays useful.
+  function adBlitzCost(state) {
+    return Math.round(20000 + capacity(state) * 60);
+  }
   function adBlitz(state) {
-    var price = 30000;
+    var price = adBlitzCost(state);
     if (state.treasury < price) return false;
     state.treasury -= price;
-    state.enrollment = Math.min(capacity(state), state.enrollment + capacity(state) * 0.25 + 20);
-    state.heat = clamp(state.heat + 5);
+    var cap = capacity(state);
+    // fill most of the empty seats at once
+    state.enrollment = Math.min(cap, state.enrollment + (cap - state.enrollment) * 0.6 + cap * 0.15 + 30);
+    state.heat = clamp(state.heat + 4);
     return true;
   }
 
@@ -142,6 +158,8 @@ window.BCT = window.BCT || {};
     }
     // heat cools slowly when you're running clean
     if (!anyScheme) state.heat = clamp(state.heat - 0.15 * dt);
+    // counselors keep cooling the scandal even while schemes run
+    if (lvl(state, "counselors") > 0) state.heat = clamp(state.heat - lvl(state, "counselors") * 0.03 * dt);
 
     BCT.state.checkTragedy(state);
   }
@@ -168,7 +186,7 @@ window.BCT = window.BCT || {};
     ASSETS: ASSETS, SCHEMES: SCHEMES, MUDRA_UNIT: MUDRA_UNIT,
     format: format, formatRate: formatRate,
     capacity: capacity, incomePerSec: incomePerSec, cost: cost,
-    maxed: maxed, canAfford: canAfford, buy: buy, adBlitz: adBlitz,
+    maxed: maxed, canAfford: canAfford, buy: buy, adBlitz: adBlitz, adBlitzCost: adBlitzCost,
     tick: tick, creditOffline: creditOffline,
     unlockThreshold: unlockThreshold, chapterUnlocked: chapterUnlocked, lvl: lvl
   };

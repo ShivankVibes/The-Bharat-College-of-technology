@@ -308,6 +308,7 @@ window.BCT = window.BCT || {};
         btn.innerHTML =
           '<span class="b-name">' + cfg.label + ' <em data-lv></em></span>' +
           '<span class="b-blurb">' + cfg.blurb + '</span>' +
+          '<span class="b-benefit">' + (cfg.benefit || "") + '</span>' +
           '<span class="b-cost" data-cost></span>';
         btn.addEventListener("click", function () { handlers.onBuy(key); });
         grid.appendChild(btn);
@@ -325,6 +326,7 @@ window.BCT = window.BCT || {};
     ab.innerHTML =
       '<span class="b-name">Ad blitz</span>' +
       '<span class="b-blurb">A sudden surge of new students. Raises Heat.</span>' +
+      '<span class="b-benefit">Fills most of your empty seats at once · +Heat · cost scales with size</span>' +
       '<span class="b-cost" data-blitzcost></span>';
     ab.addEventListener("click", function () { handlers.onAdBlitz(); });
     blitzWrap.appendChild(ab);
@@ -354,8 +356,9 @@ window.BCT = window.BCT || {};
     }
     var blitz = refs.buildGroups.querySelector("[data-action=adblitz]");
     if (blitz) {
-      blitz.querySelector("[data-blitzcost]").textContent = E.format(30000);
-      blitz.disabled = state.treasury < 30000;
+      var bcost = E.adBlitzCost(state);
+      blitz.querySelector("[data-blitzcost]").textContent = E.format(bcost);
+      blitz.disabled = state.treasury < bcost;
     }
     renderSchemes(state);
   }

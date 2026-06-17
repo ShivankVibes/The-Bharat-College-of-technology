@@ -60,6 +60,15 @@
     ok("income positive with students", E.incomePerSec(t) > 0);
     ok("capacity grows with rooms", E.capacity(t) > 12);
     var before = t.treasury; E.tick(t, 2); ok("tick earns money", t.treasury > before);
+
+    // counselor cools heat; ad blitz cost scales with capacity
+    var cz = S.defaultState(); cz.heat = 40; cz.treasury = 200000;
+    E.buy(cz, "counselors");
+    ok("counselor lowers heat on hire", cz.heat < 40);
+    ok("counselor helps the ledger", cz.ledger.aarav > 60);
+    var small = S.defaultState();
+    var big = S.defaultState(); big.assets.branches = 3;
+    ok("ad-blitz cost scales with size", E.adBlitzCost(big) > E.adBlitzCost(small));
     var sch = S.defaultState(); sch.enrollment = 100; sch.schemes.leak = true;
     ok("scheme multiplies income", E.incomePerSec(sch) > E.incomePerSec((function(){var x=S.defaultState();x.enrollment=100;return x;})()));
 

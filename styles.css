@@ -427,6 +427,44 @@ body {
 .qi-btn:disabled { opacity: .45; cursor: not-allowed; }
 .qi-btn:disabled small { color: var(--ink-dim); }
 
+/* benefit lines: hidden until the player asks to see them */
+.b-benefit { display: none; font-size: 11px; color: var(--clean); line-height: 1.35; margin-top: 2px; }
+.build-groups.show-benefits .b-benefit { display: block; }
+.benefit-toggle {
+  font: inherit; font-size: 12px; cursor: pointer; margin-bottom: 14px;
+  background: transparent; color: var(--folder); border: 1px solid var(--line);
+  border-radius: 8px; padding: 7px 11px;
+}
+.benefit-toggle:hover { border-color: var(--folder); }
+.benefit-toggle:focus-visible { outline: 2px solid var(--folder); outline-offset: 2px; }
+.benefit-toggle[aria-pressed="true"] { background: rgba(201,162,75,.12); }
+
+/* ---- rules & hints overlay ---- */
+.overlay {
+  position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center;
+  background: rgba(5, 6, 9, .72); backdrop-filter: blur(3px); padding: 18px;
+}
+.overlay[hidden] { display: none; }
+.overlay-card {
+  position: relative; max-width: 560px; width: 100%; max-height: 88vh; overflow-y: auto;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line); border-top: 3px solid var(--folder); border-radius: var(--radius);
+  padding: clamp(20px, 4vw, 34px); box-shadow: var(--shadow);
+}
+.overlay-close {
+  position: absolute; top: 12px; right: 14px; width: 34px; height: 34px; line-height: 1;
+  font-size: 22px; cursor: pointer; color: var(--ink-dim);
+  background: var(--bg-2); border: 1px solid var(--line); border-radius: 8px;
+}
+.overlay-close:hover { color: var(--ink); border-color: var(--folder); }
+.overlay-card h2 { margin: 2px 0 10px; font-size: 24px; }
+.overlay-card h3 { margin: 18px 0 7px; font-size: 12px; text-transform: uppercase; letter-spacing: .12em; color: var(--folder); }
+.overlay-card p { font-size: 14px; line-height: 1.55; color: #d3cfc4; margin: 0 0 8px; }
+.rules-list { margin: 0; padding-left: 18px; }
+.rules-list li { font-size: 13.5px; line-height: 1.5; color: #cfcabd; margin-bottom: 6px; }
+.rules-list strong { color: var(--ink); }
+.rules-list em { color: var(--folder); font-style: italic; }
+
 /* mode toggle: show dashboard OR story on the right */
 .game-board.mode-dashboard #storyPanel { display: none; }
 .game-board.mode-story #dashPanel { display: none; }

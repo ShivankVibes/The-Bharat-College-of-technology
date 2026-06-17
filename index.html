@@ -69,6 +69,7 @@
             <h1>The Bharat College of Technology</h1>
           </div>
           <div class="topbar-actions">
+            <button id="rulesBtn" class="icon-button" type="button">Rules &amp; hints</button>
             <button id="muteBtn" class="icon-button" type="button" aria-pressed="false">Sound: on</button>
             <button id="restartBtn" class="icon-button" type="button" aria-label="Restart">Restart</button>
           </div>
@@ -148,6 +149,7 @@
         <div class="dash-head">
           <h2>Run the Institute</h2>
           <p class="dash-sub" id="dashSub">Build it. Watch the Mudra come in.</p>
+          <button id="benefitToggle" class="benefit-toggle" type="button" aria-pressed="false">Show what each upgrade does</button>
         </div>
 
         <div class="nextfile-card" id="nextFileCard">
@@ -189,6 +191,45 @@
         </div>
       </aside>
     </section>
+
+    <!-- ============ RULES & HINTS ============ -->
+    <div id="rulesOverlay" class="overlay" hidden>
+      <div class="overlay-card" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+        <button id="rulesClose" class="overlay-close" type="button" aria-label="Close">×</button>
+        <p class="kicker">How to play</p>
+        <h2 id="rulesTitle">Rules &amp; Hints</h2>
+
+        <h3>The idea</h3>
+        <p>Over twelve years you grow one rented tuition room into an empire. Every choice decides
+        whether it grows honestly or by capturing the exam system — and who pays for it.</p>
+
+        <h3>Your numbers</h3>
+        <ul class="rules-list">
+          <li><strong>Treasury (Mudra)</strong> — your money. It ticks in automatically from student fees, even while you're away.</li>
+          <li><strong>Income/s &amp; Students</strong> — fees come from enrolled students; more students, more income.</li>
+          <li><strong>Saakh</strong> — your credibility. Slow to build, easy to burn, impossible to buy back.</li>
+          <li><strong>Power</strong> — your reach and influence.</li>
+          <li><strong>Heat</strong> — scandal exposure. Let it get too high and the empire gets raided.</li>
+          <li><strong>The human ledger</strong> — Aarav, Meena and the Sharmas. They are real people your choices land on. Keep an eye on them.</li>
+        </ul>
+
+        <h3>What you do</h3>
+        <ul class="rules-list">
+          <li><strong>Build</strong> — spend Mudra on subject rooms, floors, branches and staff to grow students and income. Tap “Show what each upgrade does” to see the exact effect.</li>
+          <li><strong>Open files</strong> — story chapters unlock as your enrolment grows. Open one to make a moral choice that hits both your stats and your economy.</li>
+          <li><strong>Schemes</strong> — corrupt choices unlock schemes that boost income, but raise Heat and grind down the people who trust you, every second they run.</li>
+        </ul>
+
+        <h3>Hints</h3>
+        <ul class="rules-list">
+          <li>Build <strong>subject rooms</strong> and a <strong>Marketing floor</strong> first to fill seats and unlock the next file.</li>
+          <li><strong>Ad blitz</strong> instantly fills most empty seats — great right after you expand capacity.</li>
+          <li><strong>Counselors</strong> lower Heat and protect your students — they can avert the darkest outcome even on a corrupt run.</li>
+          <li><strong>Teachers</strong> raise Saakh; the <strong>Finance floor</strong> squeezes more fee from every student.</li>
+          <li>Endings judge the <em>character</em> of your empire, not your bank balance. Money never buys you out.</li>
+        </ul>
+      </div>
+    </div>
   </main>
 
   <script src="src/data.js"></script>

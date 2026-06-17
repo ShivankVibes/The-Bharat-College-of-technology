@@ -64,6 +64,27 @@ window.BCT = window.BCT || {};
     if (story) story.addEventListener("click", function () {
       if (UI.isTyping()) UI.finishStory(currentText);
     });
+
+    // Rules & hints overlay
+    var rulesBtn = document.getElementById("rulesBtn");
+    var overlay = document.getElementById("rulesOverlay");
+    var rulesClose = document.getElementById("rulesClose");
+    function openRules() { if (overlay) { overlay.hidden = false; AU.cue("click"); } }
+    function closeRules() { if (overlay) overlay.hidden = true; }
+    if (rulesBtn) rulesBtn.addEventListener("click", openRules);
+    if (rulesClose) rulesClose.addEventListener("click", closeRules);
+    if (overlay) overlay.addEventListener("click", function (e) { if (e.target === overlay) closeRules(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeRules(); });
+
+    // "Show what each upgrade does" toggle
+    var benefitToggle = document.getElementById("benefitToggle");
+    var groups = document.getElementById("buildGroups");
+    if (benefitToggle && groups) benefitToggle.addEventListener("click", function () {
+      var on = groups.classList.toggle("show-benefits");
+      benefitToggle.setAttribute("aria-pressed", on ? "true" : "false");
+      benefitToggle.textContent = on ? "Hide upgrade details" : "Show what each upgrade does";
+      AU.cue("click");
+    });
   }
 
   function syncMuteButton() {
