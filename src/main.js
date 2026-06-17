@@ -183,9 +183,33 @@ window.BCT = window.BCT || {};
     var dt = Math.min(5, Math.max(0, (t - lastFrame) / 1000));
     lastFrame = t;
     state.lastTick = t;
+    var wasTragedy = state.tragedy;
     EC.tick(state, dt);
     paintAll();
     S.save(state);
+    // If sustained corruption broke Aarav while you were optimising the numbers,
+    // the game stops and makes you read it.
+    if (state.tragedy && !wasTragedy) showIdleTragedy();
+  }
+
+  function showIdleTragedy() {
+    stopTick();
+    mode = "story";
+    UI.setMode("story");
+    UI.hideQuickInvest();
+    var ch = D.chapters[Math.min(state.chaptersDone, D.chapters.length - 1)];
+    UI.renderHeader(state, ch, "The Cost", "An Empty Seat");
+    AU.cue("toll");
+    setText(TRAGEDY + "\n\n" + HELPLINE);
+    UI.renderMeters(state);
+    UI.renderTycoonBar(state);
+    UI.renderLedger(state);
+    UI.renderLog(state);
+    SC.render(state, ch, null);
+    UI.renderContinue("Continue", "", function () {
+      AU.cue("click");
+      enterDashboard(0);
+    });
   }
 
   // paint everything that the dashboard shows

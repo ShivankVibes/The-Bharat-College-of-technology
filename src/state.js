@@ -2,7 +2,7 @@ window.BCT = window.BCT || {};
 (function (BCT) {
   "use strict";
 
-  var SAVE_KEY = "bct.save.v1";
+  var SAVE_KEY = "bct.save.v2";
 
   function defaultState() {
     return {
@@ -88,7 +88,18 @@ window.BCT = window.BCT || {};
   function load() {
     try {
       var raw = localStorage.getItem(SAVE_KEY);
-      return raw ? JSON.parse(raw) : null;
+      if (!raw) return null;
+      var parsed = JSON.parse(raw);
+      var base = defaultState();
+      // Merge over a fresh default so a save from an older shape can't leave
+      // economy fields undefined (which would poison income math with NaN).
+      var s = Object.assign(base, parsed);
+      s.assets = Object.assign(defaultState().assets, parsed.assets || {});
+      s.ledger = Object.assign(defaultState().ledger, parsed.ledger || {});
+      s.schemes = parsed.schemes || {};
+      if (typeof s.enrollment !== "number" || !isFinite(s.enrollment)) s.enrollment = base.enrollment;
+      if (typeof s.treasury !== "number" || !isFinite(s.treasury)) s.treasury = base.treasury;
+      return s;
     } catch (e) {
       return null;
     }

@@ -68,8 +68,10 @@ window.BCT = window.BCT || {};
   }
 
   function incomePerSec(state) {
+    var enroll = state.enrollment || 0;
     var feePer = 6 * (1 + lvl(state, "finance") * 0.22) * (1 + lvl(state, "teachers") * 0.02);
-    return state.enrollment * feePer * schemeIncomeMult(state);
+    var v = enroll * feePer * schemeIncomeMult(state);
+    return isFinite(v) ? v : 0;
   }
 
   function cost(state, key) {
@@ -98,7 +100,7 @@ window.BCT = window.BCT || {};
       state.ledger.meena = clamp(state.ledger.meena + 3);
     }
     if (key === "boardroom") state.power = clamp(state.power + 3);
-    if (key === "marketing") state.enrollment += capacity(state) * 0.05;
+    if (key === "marketing") state.enrollment = Math.min(capacity(state), state.enrollment + capacity(state) * 0.05);
     return true;
   }
 
@@ -123,6 +125,7 @@ window.BCT = window.BCT || {};
 
     // earnings
     state.treasury += incomePerSec(state) * dt;
+    if (!isFinite(state.treasury)) state.treasury = 0;
 
     // scheme drift (counselors soften the human damage)
     var soften = Math.max(0.25, 1 - lvl(state, "counselors") * 0.14);

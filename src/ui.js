@@ -12,11 +12,9 @@ window.BCT = window.BCT || {};
   function init() {
     refs = {
       saakhText: document.getElementById("saakhText"),
-      mudraText: document.getElementById("mudraText"),
       powerText: document.getElementById("powerText"),
       heatText: document.getElementById("heatText"),
       saakhBar: document.getElementById("saakhBar"),
-      mudraBar: document.getElementById("mudraBar"),
       powerBar: document.getElementById("powerBar"),
       heatBar: document.getElementById("heatBar"),
       meters: document.querySelectorAll(".meter"),
@@ -168,7 +166,10 @@ window.BCT = window.BCT || {};
   function effectSummary(fx) {
     var parts = [];
     if (fx.saakh) parts.push("Saakh " + signed(fx.saakh));
-    if (fx.mudra) parts.push("Mudra " + signed(fx.mudra));
+    if (fx.mudra) {
+      var rupees = fx.mudra * (BCT.econ ? BCT.econ.MUDRA_UNIT : 12000);
+      parts.push((fx.mudra > 0 ? "+" : "−") + BCT.econ.format(Math.abs(rupees)));
+    }
     if (fx.power) parts.push("Power " + signed(fx.power));
     if (fx.heat) parts.push("Heat " + signed(fx.heat));
     return parts.join("  ");
