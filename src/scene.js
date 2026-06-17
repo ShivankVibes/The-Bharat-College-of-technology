@@ -89,6 +89,63 @@ window.BCT = window.BCT || {};
     }
   }
 
+  // Dashboard view: the campus reflects what you've built.
+  function renderDashboard(state) {
+    if (!refs) init();
+    if (!refs || !refs.root) return;
+    var hasEmpire = state.chaptersDone >= 1 || state.enrollment > 60 ||
+      (state.assets && (state.assets.branches > 0 || state.assets.marketing > 0));
+    var classes = ["scene", hasEmpire ? "is-city" : "is-room"];
+    if (state.heat >= 55) classes.push("is-heat");
+    if (state.heat >= 78 || state.tragedy) classes.push("is-crisis");
+    refs.root.className = classes.join(" ");
+    refs.root.setAttribute("data-heat", heatBand(state.heat));
+    refs.root.style.setProperty("--heat", (state.heat / 100).toFixed(2));
+
+    growBuildings(state);
+
+    if (refs.board) refs.board.textContent = Math.floor(state.enrollment) + " STUDENTS";
+    if (refs.title) refs.title.textContent = state.institute || "Your institute";
+    if (refs.sub) refs.sub.textContent = scheme_summary(state);
+
+    if (refs.aarav) {
+      var a = state.ledger.aarav;
+      refs.aarav.classList.toggle("fade-1", a < 45 && a >= 25);
+      refs.aarav.classList.toggle("fade-2", a < 25 && a >= 8);
+      refs.aarav.classList.toggle("gone", state.tragedy || a < 8);
+    }
+  }
+
+  function scheme_summary(state) {
+    var n = 0;
+    for (var k in state.schemes) if (state.schemes[k]) n++;
+    if (n === 0) return "Clean books, slow growth";
+    return n + (n === 1 ? " scheme running" : " schemes running");
+  }
+
+  // Light up floors you've built; grow neighbours with branches.
+  function growBuildings(state) {
+    var a = state.assets || {};
+    setFloor("ads", a.marketing > 0);
+    setFloor("finance", a.finance > 0);
+    setFloor("dept", (a.maths + a.physics + a.chemistry) > 0);
+    setFloor("board", a.boardroom > 0);
+    var campus = document.querySelector(".b-campus");
+    if (campus) {
+      var floors = (a.marketing > 0) + (a.finance > 0) + ((a.maths + a.physics + a.chemistry) > 0) + (a.boardroom > 0);
+      campus.style.filter = "brightness(" + (0.8 + floors * 0.06) + ")";
+    }
+    var tall = document.querySelector(".b-tall");
+    var mid = document.querySelector(".b-mid");
+    if (tall) tall.style.height = (130 + (a.branches || 0) * 14) + "px";
+    if (mid) mid.style.height = (100 + (a.hostel || 0) * 10) + "px";
+  }
+
+  function setFloor(name, on) {
+    var el = document.querySelector('.office-floor[data-floor="' + name + '"]');
+    if (el) el.classList.toggle("built", on);
+  }
+
   function showEnding(endingKey) {
     if (!refs) init();
     if (!refs || !refs.root) return;
@@ -105,5 +162,5 @@ window.BCT = window.BCT || {};
     }
   }
 
-  BCT.scene = { init: init, render: render, showEnding: showEnding };
+  BCT.scene = { init: init, render: render, renderDashboard: renderDashboard, showEnding: showEnding };
 })(window.BCT);

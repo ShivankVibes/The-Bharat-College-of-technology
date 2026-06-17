@@ -46,7 +46,7 @@
         <div class="field">
           <label for="subjectSelect">You start by teaching…</label>
           <select id="subjectSelect">
-            <option value="math">Maths</option>
+            <option value="maths">Maths</option>
             <option value="physics">Physics</option>
             <option value="chemistry">Chemistry</option>
           </select>
@@ -61,7 +61,7 @@
     </section>
 
     <!-- ============ GAME ============ -->
-    <section id="screen-game" class="screen game-board" aria-label="Story">
+    <section id="screen-game" class="screen game-board mode-dashboard" aria-label="Game">
       <div class="stage">
         <div class="topbar">
           <div class="topbar-title">
@@ -113,15 +113,18 @@
           </div>
         </div>
 
+        <!-- tycoon readout -->
+        <div class="tycoon-bar" aria-label="Economy">
+          <div class="ty"><span>Treasury</span><strong id="treasuryText">₹50,000</strong></div>
+          <div class="ty"><span>Income</span><strong id="incomeText">₹0/s</strong></div>
+          <div class="ty"><span>Students</span><strong id="enrollText">6</strong></div>
+        </div>
+
         <!-- meters -->
         <div class="meters" aria-label="Stats">
           <div class="meter" data-meter="saakh">
             <div class="meter-label"><span>Saakh</span><strong id="saakhText">55</strong></div>
             <div class="bar"><span id="saakhBar" style="width:55%" role="progressbar" aria-label="Saakh" aria-valuemin="0" aria-valuemax="100" aria-valuenow="55"></span></div>
-          </div>
-          <div class="meter" data-meter="mudra">
-            <div class="meter-label"><span>Mudra</span><strong id="mudraText">18</strong></div>
-            <div class="bar"><span id="mudraBar" style="width:18%" role="progressbar" aria-label="Mudra" aria-valuemin="0" aria-valuemax="100" aria-valuenow="18"></span></div>
           </div>
           <div class="meter" data-meter="power">
             <div class="meter-label"><span>Power</span><strong id="powerText">5</strong></div>
@@ -132,10 +135,40 @@
             <div class="bar"><span id="heatBar" style="width:0%" role="progressbar" aria-label="Heat" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></span></div>
           </div>
         </div>
+
+        <!-- human ledger: always visible, right next to the money -->
+        <div class="ledger-box pinned">
+          <h3>The human ledger</h3>
+          <ul id="ledger"></ul>
+        </div>
       </div>
 
-      <!-- story panel -->
-      <aside class="story-panel">
+      <!-- ===== RIGHT: DASHBOARD ===== -->
+      <aside class="dash-panel" id="dashPanel" aria-label="Manage the institute">
+        <div class="dash-head">
+          <h2>Run the Institute</h2>
+          <p class="dash-sub" id="dashSub">Build it. Watch the Mudra come in.</p>
+        </div>
+
+        <div class="nextfile-card" id="nextFileCard">
+          <span class="nf-kicker">Next file</span>
+          <strong id="nfTitle">File 1 — The Rented Room</strong>
+          <p id="nfTeaser"></p>
+          <div class="nf-progress"><span id="nfBar"></span></div>
+          <small id="nfHint"></small>
+          <button id="openFileBtn" class="btn primary" type="button" disabled>Open the file</button>
+        </div>
+
+        <div id="buildGroups" class="build-groups"></div>
+
+        <div class="schemes-box">
+          <h3>Active schemes</h3>
+          <ul id="schemesList"><li class="none">None. The books are clean — for now.</li></ul>
+        </div>
+      </aside>
+
+      <!-- ===== RIGHT: STORY ===== -->
+      <aside class="story-panel" id="storyPanel" aria-label="Story">
         <div class="chapter-row">
           <span id="stageTag">File 1 of 7</span>
           <span id="episodeTag">The Choice</span>
@@ -145,10 +178,11 @@
         <p id="sceneText" aria-live="polite" aria-atomic="true"></p>
         <div class="choices" id="choices"></div>
 
-        <div class="ledger-box">
-          <h3>The human ledger</h3>
-          <ul id="ledger"></ul>
+        <div class="quick-invest" id="quickInvest" hidden>
+          <h3>Invest this year <small id="qiTreasury"></small></h3>
+          <div class="qi-buttons" id="qiButtons"></div>
         </div>
+
         <div class="log">
           <h3>Consequence log</h3>
           <ul id="eventLog"></ul>
@@ -159,6 +193,7 @@
 
   <script src="src/data.js"></script>
   <script src="src/state.js"></script>
+  <script src="src/econ.js"></script>
   <script src="src/audio.js"></script>
   <script src="src/scene.js"></script>
   <script src="src/ui.js"></script>

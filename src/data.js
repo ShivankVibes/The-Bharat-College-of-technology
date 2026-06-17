@@ -15,7 +15,7 @@ window.BCT = window.BCT || {};
   var subjects = {
     physics: { label: "Physics", board: "FORCE = MASS x ?", intro: "the laws that don't bend for anyone" },
     chemistry: { label: "Chemistry", board: "BALANCE THE EQUATION", intro: "reactions that don't care who's watching" },
-    math: { label: "Maths", board: "PROVE IT", intro: "the one subject that can't be argued with" }
+    maths: { label: "Maths", board: "PROVE IT", intro: "the one subject that can't be argued with" }
   };
 
   // ---- Recurring characters (the human ledger) --------------------------
@@ -72,6 +72,8 @@ window.BCT = window.BCT || {};
   var chapters = [
     {
       id: "origins",
+      scheme: "hype",
+      teaser: "Six students are waiting. Rent is due Friday. It starts here.",
       year: "Year 1",
       title: "The Rented Room",
       scene: "room",
@@ -126,6 +128,8 @@ window.BCT = window.BCT || {};
 
     {
       id: "partners",
+      scheme: "capitation",
+      teaser: "A bigger hall is free. A rich father is offering money. The market is brutal.",
       year: "Year 3",
       title: "Rich Dads and Poached Stars",
       scene: "branch",
@@ -179,6 +183,8 @@ window.BCT = window.BCT || {};
 
     {
       id: "rankmachine",
+      scheme: "fakerate",
+      teaser: "Billboards in three cities. An agency is selling toppers' faces. The numbers can be bent.",
       year: "Year 5",
       title: "The Rank Machine",
       scene: "city",
@@ -232,6 +238,8 @@ window.BCT = window.BCT || {};
 
     {
       id: "leak",
+      scheme: "leak",
+      teaser: "A broker has been calling. He says he can get tomorrow's paper. Tonight.",
       year: "Year 7",
       title: "Tomorrow's Paper",
       scene: "city",
@@ -285,6 +293,8 @@ window.BCT = window.BCT || {};
 
     {
       id: "capture",
+      scheme: "capture",
+      teaser: "Inspection is next week. A man you didn't invite is offering 'investment'.",
       year: "Year 9",
       title: "The Seal For Sale",
       scene: "city",
@@ -338,6 +348,8 @@ window.BCT = window.BCT || {};
 
     {
       id: "reckoning",
+      scheme: "coverup",
+      teaser: "A spreadsheet has leaked. There are reporters at the gate. The story is no longer yours.",
       year: "Year 11",
       title: "The Leaked Ledger",
       scene: "crisis",
@@ -391,6 +403,8 @@ window.BCT = window.BCT || {};
 
     {
       id: "crown",
+      scheme: null,
+      teaser: "North India's coaching market bends around your name now. One decision remains.",
       year: "Year 12",
       title: "Legacy or Ruler",
       scene: "crisis",

@@ -8,17 +8,24 @@ window.BCT = window.BCT || {};
     return {
       founder: "",
       institute: "",
-      subject: "math",
+      subject: "maths",
       chapter: 0,
       episode: "choice", // choice -> profit -> consequence
       routeIntent: null, // "clean" | "dirty"
       selectedChoice: null,
+      // empire meters (0..100)
       saakh: 55,
-      mudra: 18,
       power: 5,
       heat: 0,
       ledger: { aarav: 60, sharmaDebt: 0, meena: 60 },
       tragedy: false,
+      // tycoon economy
+      treasury: 50000,
+      enrollment: 6,
+      assets: { maths: 0, physics: 0, chemistry: 0, marketing: 0, finance: 0, hostel: 0, boardroom: 0, branches: 0, teachers: 0, counselors: 0 },
+      schemes: {},
+      chaptersDone: 0,
+      lastTick: 0,
       log: []
     };
   }
@@ -30,9 +37,11 @@ window.BCT = window.BCT || {};
   function applyEffects(s, fx) {
     if (!fx) return;
     s.saakh = clamp(s.saakh + (fx.saakh || 0));
-    s.mudra = clamp(s.mudra + (fx.mudra || 0));
     s.power = clamp(s.power + (fx.power || 0));
     s.heat = clamp(s.heat + (fx.heat || 0));
+    // authored "mudra" deltas are cash rewards/costs -> the real treasury
+    var unit = (BCT.econ && BCT.econ.MUDRA_UNIT) || 12000;
+    if (fx.mudra) s.treasury = Math.max(0, (s.treasury || 0) + fx.mudra * unit);
     if (fx.ledger) {
       if (typeof fx.ledger.aarav === "number") {
         s.ledger.aarav = clamp(s.ledger.aarav + fx.ledger.aarav);
@@ -59,9 +68,10 @@ window.BCT = window.BCT || {};
   function selectEnding(s) {
     var l = s.ledger;
     var devastated = l.aarav <= 15 && l.meena <= 20;
-    if (s.mudra >= 80 && s.saakh <= 12 && devastated) return "hollow";
+    // Endings judge the empire's character, not the bank balance — money never saves you.
+    if (s.saakh <= 12 && s.power >= 55 && devastated) return "hollow";
     if (s.heat >= 80 && s.saakh <= 35) return "raid";
-    if (s.mudra >= 70 && s.power >= 70 && s.saakh < 55) return "empire";
+    if (s.power >= 70 && s.saakh < 55 && s.heat >= 40) return "empire";
     if (s.saakh >= 72 && s.heat <= 35) return "legacy";
     return "reform";
   }

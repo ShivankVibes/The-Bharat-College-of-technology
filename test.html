@@ -9,49 +9,59 @@
   <pre id="out"></pre>
   <script src="src/data.js"></script>
   <script src="src/state.js"></script>
+  <script src="src/econ.js"></script>
   <script>
     var out = document.getElementById("out"), pass = 0, fail = 0;
     function ok(name, cond) {
       if (cond) { pass++; } else { fail++; }
       out.textContent += (cond ? "PASS  " : "FAIL  ") + name + "\n";
     }
+    var S = BCT.state, D = BCT.data, E = BCT.econ;
 
-    var S = BCT.state;
-
+    // ---- engine ----
     ok("clamp upper", S.clamp(140) === 100);
     ok("clamp lower", S.clamp(-5) === 0);
     ok("clamp rounds", S.clamp(33.6) === 34);
 
     var s = S.defaultState();
-    S.applyEffects(s, { saakh: -30, mudra: 40, heat: 65, ledger: { aarav: -60 } });
-    ok("effects applied", s.mudra === 58 && s.saakh === 25 && s.heat === 65 && s.ledger.aarav === 0);
+    S.applyEffects(s, { saakh: -30, heat: 65, mudra: 10, ledger: { aarav: -60 } });
+    ok("meters applied", s.saakh === 25 && s.heat === 65 && s.ledger.aarav === 0);
+    ok("mudra routed to treasury", s.treasury === 50000 + 10 * E.MUDRA_UNIT);
 
     ok("tragedy triggers on corrupt+pressure", S.checkTragedy(s) === true && s.tragedy === true);
     ok("tragedy fires once", S.checkTragedy(s) === false);
 
     var clean = S.defaultState(); clean.saakh = 80; clean.heat = 20;
     ok("legacy ending", S.selectEnding(clean) === "legacy");
-
-    var hollow = S.defaultState();
-    hollow.mudra = 90; hollow.saakh = 8; hollow.ledger.aarav = 5; hollow.ledger.meena = 10;
+    var hollow = S.defaultState(); hollow.saakh = 8; hollow.power = 60; hollow.ledger.aarav = 5; hollow.ledger.meena = 10;
     ok("hollow ending", S.selectEnding(hollow) === "hollow");
-
     var raid = S.defaultState(); raid.heat = 85; raid.saakh = 30;
     ok("raid ending", S.selectEnding(raid) === "raid");
-
-    var empire = S.defaultState(); empire.mudra = 75; empire.power = 75; empire.saakh = 40;
+    var empire = S.defaultState(); empire.power = 75; empire.saakh = 40; empire.heat = 50;
     ok("empire ending", S.selectEnding(empire) === "empire");
-
     ok("reform is the fallback", S.selectEnding(S.defaultState()) === "reform");
 
-    // data.js sanity (loaded above)
-    ok("data present", !!(BCT.data && BCT.data.chapters));
-    ok("7 chapters", BCT.data.chapters.length === 7);
-    ok("5 endings", Object.keys(BCT.data.endings).length === 5);
-    ok("every chapter has clean+dirty routes", BCT.data.chapters.every(function (c) {
-      return c.routes && c.routes.clean && c.routes.clean.length === 3 &&
-             c.routes.dirty && c.routes.dirty.length === 3;
+    // ---- data ----
+    ok("7 chapters", D.chapters.length === 7);
+    ok("5 endings", Object.keys(D.endings).length === 5);
+    ok("every chapter has 3+3 routes", D.chapters.every(function (c) {
+      return c.routes.clean.length === 3 && c.routes.dirty.length === 3;
     }));
+    ok("each non-final chapter has a scheme + teaser", D.chapters.every(function (c) {
+      return c.teaser && (c.scheme !== undefined);
+    }));
+
+    // ---- econ ----
+    var t = S.defaultState(); t.assets.maths = 1; t.enrollment = 50;
+    var c0 = E.cost(t, "maths"); E.buy(t, "maths"); var c1 = E.cost(t, "maths");
+    ok("cost rises with level", c1 > c0);
+    ok("buy deducts treasury", t.treasury === 50000 - c0);
+    ok("buy raises level", t.assets.maths === 2);
+    ok("income positive with students", E.incomePerSec(t) > 0);
+    ok("capacity grows with rooms", E.capacity(t) > 12);
+    var before = t.treasury; E.tick(t, 2); ok("tick earns money", t.treasury > before);
+    var sch = S.defaultState(); sch.enrollment = 100; sch.schemes.leak = true;
+    ok("scheme multiplies income", E.incomePerSec(sch) > E.incomePerSec((function(){var x=S.defaultState();x.enrollment=100;return x;})()));
 
     out.textContent += "\n" + pass + " passed, " + fail + " failed\n";
     document.title = fail ? "FAIL (" + fail + ")" : "PASS";
